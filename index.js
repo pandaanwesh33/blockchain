@@ -66,7 +66,10 @@ app.post('/api/transact', (req, res) => {
   let transaction = transactionPool
     .existingTransaction({ inputAddress: wallet.publicKey });
 
+  //error 400 means a bad request
   try {
+    //if same transaction already exists then call transaction update function
+    //else create a new transaction 
     if (transaction) {
       transaction.update({ senderWallet: wallet, recipient, amount });
     } else {
@@ -80,6 +83,7 @@ app.post('/api/transact', (req, res) => {
     return res.status(400).json({ type: 'error', message: error.message });
   }
 
+  //add transaction to local transaction pool
   transactionPool.setTransaction(transaction);
 
   pubsub.broadcastTransaction(transaction);
@@ -124,6 +128,8 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './client/src/index.html'));
 });
 
+//when a new node starts it is updated with the blockchain data and the 
+//transaction pool map
 const syncWithRootState = () => {
   request({ url: `${ROOT_NODE_ADDRESS}/api/blocks` }, (error, response, body) => {
     if (!error && response.statusCode === 200) {
@@ -190,10 +196,13 @@ if (process.env.GENERATE_PEER_PORT === 'true') {
   PEER_PORT = DEFAULT_PORT + Math.ceil(Math.random() * 1000);
 }
 
+//PORT is unique for every instance, else conflict occurs
 const PORT = process.env.PORT || PEER_PORT || DEFAULT_PORT;
 app.listen(PORT, () => {
   console.log(`listening at localhost:${PORT}`);
 
+  //initially when the node is created , then call syncWithRootState function
+  //When root node joins the network , then it dont need to sync with itself
   if (PORT !== DEFAULT_PORT) {
     syncWithRootState();
   }

@@ -44,9 +44,11 @@ class Transaction {
     this.input = this.createInput({ senderWallet, outputMap: this.outputMap });
   }
 
+  //checks wheather a transaction is valid or not
   static validTransaction(transaction) {
     const { input: { address, amount, signature }, outputMap } = transaction;
 
+    //reduce func. reduces the array to a single value
     const outputTotal = Object.values(outputMap)
       .reduce((total, outputAmount) => total + outputAmount);
 

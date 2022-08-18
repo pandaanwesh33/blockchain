@@ -39,6 +39,7 @@ class Blockchain {
     this.chain = chain;
   }
 
+  //validates the transaction data in the block
   validTransactionData({ chain }) {
     for (let i=1; i<chain.length; i++) {
       const block = chain[i];

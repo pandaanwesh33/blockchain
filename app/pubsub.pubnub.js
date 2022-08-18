@@ -1,11 +1,12 @@
 const PubNub = require('pubnub');
 
 const credentials = {
-  publishKey: 'pub-c-ec30f7ec-578f-4aa2-81c8-59077fb942c4',
-  subscribeKey: 'sub-c-eda4e664-027b-11e9-a39c-e60c31199fb2',
-  secretKey: 'sec-c-OWQwMTg1MGMtY2U2YS00ZmVlLWE1YmEtOTVmMWZmN2ZiOWVm'
+  publishKey: 'pub-c-89122e18-fa7f-4d46-b6c7-bdc9b8796cbe',
+  subscribeKey: 'sub-c-8d8b65f6-8142-45ac-91b1-d7c778833add',
+  secretKey: 'sec-c-OTEwNTk2ZDItODFhMC00M2JkLWEyMjEtZDE1ODM5NDA4OWM3'
 };
 
+//these are the channels in pub/sub 
 const CHANNELS = {
   TEST: 'TEST',
   BLOCKCHAIN: 'BLOCKCHAIN',
@@ -20,8 +21,10 @@ class PubSub {
 
     this.pubnub = new PubNub(credentials);
 
+    //pub/sub instance that acts as an subscriber
     this.pubnub.subscribe({ channels: Object.values(CHANNELS) });
 
+    //make subscriber listens to channels
     this.pubnub.addListener(this.listener());
   }
 

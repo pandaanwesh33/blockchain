@@ -23,12 +23,15 @@ class TransactionPool {
     return transactions.find(transaction => transaction.input.address === inputAddress);
   }
 
+  //use of filter : 
+  // it filters all the transactions for which the validTransaction function is true
   validTransactions() {
     return Object.values(this.transactionMap).filter(
       transaction => Transaction.validTransaction(transaction)
     );
   }
 
+  //this clears the transactions in the local pool , which are included in the block
   clearBlockchainTransactions({ chain }) {
     for (let i=1; i<chain.length; i++) {
       const block = chain[i];

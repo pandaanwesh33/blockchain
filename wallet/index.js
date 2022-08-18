@@ -15,6 +15,8 @@ class Wallet {
     return this.keyPair.sign(cryptoHash(data))
   }
 
+  //when making a transaction balance of wallet is calculated and checked 
+  //if transaction can be made or not
   createTransaction({ recipient, amount, chain }) {
     if (chain) {
       this.balance = Wallet.calculateBalance({
@@ -30,6 +32,9 @@ class Wallet {
     return new Transaction({ senderWallet: this, recipient, amount });
   }
 
+  //to check balance of a wallet, start from last block and move towards genesis,
+  //stop at the first i.e the most recent block where that wallet has done the 
+  //trans. bcoz we can get the balance of wallet from that block.
   static calculateBalance({ chain, address }) {
     let hasConductedTransaction = false;
     let outputsTotal = 0;
